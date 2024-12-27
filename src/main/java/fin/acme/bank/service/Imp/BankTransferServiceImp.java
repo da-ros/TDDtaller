@@ -3,15 +3,18 @@ package fin.acme.bank.service.Imp;
 import fin.acme.bank.exception.NotEnoughFundsException;
 import fin.acme.bank.exception.NotFoundAccountException;
 import fin.acme.bank.model.Account;
+import fin.acme.bank.service.BankTransferService;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Service
 public class BankTransferServiceImp implements BankTransferService {
 
     private BankTransferServiceImp bankTransferServiceImp;
     private Map<String, Account> accountData;
 
-    public boolean transfer(String fromAccountNumber, String toAccountNumber, double amount, String description)
+    public void transfer(String fromAccountNumber, String toAccountNumber, double amount, String description)
             throws  NotFoundAccountException, NotEnoughFundsException {
         if (!accountData.containsKey(fromAccountNumber)) {
             throw new NotFoundAccountException("Not found fromAccount");
@@ -30,8 +33,6 @@ public class BankTransferServiceImp implements BankTransferService {
 
         fromAccount.setBalance(fromAccount.getBalance() - amount);
         toAccount.setBalance(toAccount.getBalance() + amount);
-
-        return true;
     }
 
     public void  setAccountData(Map<String, Account> accountData) {
