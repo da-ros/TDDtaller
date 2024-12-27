@@ -52,5 +52,4 @@ class BankTransferControllerTest {
                 .andExpect(status().isOk());
 
     }
-
 }
