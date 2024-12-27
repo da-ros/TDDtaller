@@ -13,15 +13,7 @@ public class BankTransferServiceImp implements BankTransferService {
         return false;
     }
 
-    public BankTransferServiceImp getInstance(Map<String, Account> accountData) {
-        if(bankTransferServiceImp == null){
-            bankTransferServiceImp = new BankTransferServiceImp();
-        }
-        if(accountData == null){
-            this.accountData = accountData;
-        }
-
-        return bankTransferServiceImp;
-
+    public void  setAccountData(Map<String, Account> accountData) {
+        this.accountData = accountData;
     }
 }

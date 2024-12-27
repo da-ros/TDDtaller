@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface BankTransferService {
 
-    BankTransferServiceImp getInstance(Map<String, Account> accountData);
+    void setAccountData(Map<String, Account> accountData);
 
     boolean transfer(String fromAccount, String toAccount, double amount, String description);
 }
