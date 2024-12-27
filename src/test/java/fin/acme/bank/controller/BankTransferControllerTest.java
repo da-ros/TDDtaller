@@ -2,6 +2,7 @@ package fin.acme.bank.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fin.acme.bank.controller.dto.TransferRequest;
+import fin.acme.bank.exception.NotEnoughFundsException;
 import fin.acme.bank.model.Account;
 import fin.acme.bank.service.BankTransferService;
 import org.junit.jupiter.api.DisplayName;
@@ -35,13 +36,8 @@ class BankTransferControllerTest {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Test
-    @DisplayName("whenEnoughAmountThenTransferSuccess return 200")
+    @DisplayName("givenEnoughAmountWhenCallTransferThen return 200")
     void givenEnoughAmountWhenCallTransferThenReturn200() throws Exception{
-        Map<String, Account> mockAccountData = new HashMap<>();
-        mockAccountData.put("123-456", new Account("123-456", "John Doe", 500.0));
-        mockAccountData.put("789-101", new Account("789-101", "Jane Smith", 0.0));
-        bankTransferServiceMock.setAccountData(mockAccountData);
-
         TransferRequest request = new TransferRequest("123-456","789-101",
                 500.0,"Payment for services");
 
@@ -50,6 +46,23 @@ class BankTransferControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @DisplayName("givenNotEnoughAmountWhenCallTransferThen return 400")
+    void givenNotEnoughAmountWhenCallTransferThenReturn400() throws Exception{
+        when(bankTransferServiceMock.transfer(anyString(), anyString(), anyDouble(), anyString())).
+                thenThrow(new NotEnoughFundsException("Amount is greather than available fromAccount's balance"));
+
+        TransferRequest request = new TransferRequest("123-456","789-101",
+                700.0,"Payment for services");
+
+        mockMvc.perform(post("http://localhost:8080/bank/transfer")
+                        .content(MAPPER.writeValueAsBytes(request))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isBadRequest());
 
     }
 }

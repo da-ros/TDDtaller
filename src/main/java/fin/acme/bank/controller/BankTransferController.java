@@ -23,13 +23,13 @@ public class BankTransferController {
     private BankTransferService bankTransferService;
 
     @PostMapping("/transfer")
-    public ResponseEntity<Void> transfer(@RequestBody TransferRequest transferRequest) {
+    public ResponseEntity<Object> transfer(@RequestBody TransferRequest transferRequest) {
         try {
             bankTransferService.transfer(transferRequest.fromAccount(), transferRequest.toAccount(),
                     transferRequest.amount(), transferRequest.description());
             return ok().build();
         } catch (NotFoundAccountException | NotEnoughFundsException ex) {
-            return status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 }

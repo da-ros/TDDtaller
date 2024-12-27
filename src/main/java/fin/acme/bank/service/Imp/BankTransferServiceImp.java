@@ -14,7 +14,7 @@ public class BankTransferServiceImp implements BankTransferService {
     private BankTransferServiceImp bankTransferServiceImp;
     private Map<String, Account> accountData;
 
-    public void transfer(String fromAccountNumber, String toAccountNumber, double amount, String description)
+    public boolean transfer(String fromAccountNumber, String toAccountNumber, double amount, String description)
             throws  NotFoundAccountException, NotEnoughFundsException {
         if (!accountData.containsKey(fromAccountNumber)) {
             throw new NotFoundAccountException("Not found fromAccount");
@@ -33,6 +33,7 @@ public class BankTransferServiceImp implements BankTransferService {
 
         fromAccount.setBalance(fromAccount.getBalance() - amount);
         toAccount.setBalance(toAccount.getBalance() + amount);
+        return true;
     }
 
     public void  setAccountData(Map<String, Account> accountData) {

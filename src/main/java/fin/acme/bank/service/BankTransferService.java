@@ -10,5 +10,5 @@ public interface BankTransferService {
 
     void setAccountData(Map<String, Account> accountData);
 
-    void transfer(String fromAccount, String toAccount, double amount, String description) throws NotFoundAccountException, NotEnoughFundsException;
+    boolean transfer(String fromAccount, String toAccount, double amount, String description) throws NotFoundAccountException, NotEnoughFundsException;
 }
