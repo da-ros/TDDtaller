@@ -1,21 +1,30 @@
 package fin.acme.bank.service.Imp;
 
+import fin.acme.bank.DataUtil;
 import fin.acme.bank.exception.NotEnoughFundsException;
 import fin.acme.bank.exception.NotFoundAccountException;
 import fin.acme.bank.model.Account;
 import fin.acme.bank.service.BankTransferService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class BankTransferServiceImp implements BankTransferService {
 
+    @Autowired
+    private DataUtil dataUtil;
     private BankTransferServiceImp bankTransferServiceImp;
     private Map<String, Account> accountData;
 
     public boolean transfer(String fromAccountNumber, String toAccountNumber, double amount, String description)
             throws  NotFoundAccountException, NotEnoughFundsException {
+        if (this.accountData == null ) {
+            this.accountData = dataUtil.accountData;
+        }
+
         if (!accountData.containsKey(fromAccountNumber)) {
             throw new NotFoundAccountException("Not found fromAccount");
         }
