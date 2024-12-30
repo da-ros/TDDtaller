@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  bank-app:
+    container_name: acme-bank-service
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - acme-network
+
+networks:
+  acme-network:
+    name: acme-network
+    driver: bridge
